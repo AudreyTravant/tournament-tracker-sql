@@ -1,0 +1,11 @@
+# Systèmes
+.DS_Store
+Thumbs.db
+
+# Éditeurs
+.vscode/
+.idea/
+
+# Exports et sauvegardes MySQL
+*.bak
+*.dump
