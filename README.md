@@ -30,7 +30,7 @@ Résultat :
 
 ![Vue d'ensemble : 228 joueurs, 253 paires suivies, 2,2 paires par joueur en moyenne](images/q1-vue-ensemble.png)
 
-228 joueurs pour 253 paires suivies, soit 2,2 paires par joueur en moyenne. Le facteur 2 au numérateur tient au fait que chaque paire fait intervenir deux joueurs : sans lui, la moyenne serait divisée par deux. Ce rapport est révélateur du besoin : il ne s'agit pas d'un catalogue de joueurs, mais d'un réseau de confrontations repérées, où les mêmes noms reviennent associés à des partenaires différents.
+228 joueurs pour 253 paires suivies, soit 2,2 paires par joueur en moyenne. Le facteur 2 au numérateur tient au fait que chaque paire fait intervenir deux joueurs : 253 paires font 506 apparitions à répartir sur 228 joueurs. Un même joueur revient donc dans plusieurs paires, avec des partenaires différents : la base répertorie des confrontations, pas des joueurs.
 
 ## 2. Cette paire fait-elle partie des paires suivies ?
 
