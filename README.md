@@ -140,7 +140,9 @@ Résultat :
 
 ![Classement des vingt joueurs présents dans le plus de paires](images/q6-joueurs-frequents.png)
 
-Un joueur compte une paire qu'il figure en `player1` ou en `player2` : les deux colonnes sont donc empilées avant le comptage. `UNION ALL` est ici indispensable : `UNION` dédupliquerait les identifiants et ramènerait chaque joueur à une seule participation, ce qui viderait le classement de son sens. Le regroupement porte sur `p.player_id` et non sur le seul nom concaténé, pour que deux homonymes éventuels restent distingués. Le classement obtenu dessine les joueurs autour desquels se concentre l'attention.
+Un joueur compte une paire qu'il figure en `player1` ou en `player2` : les deux colonnes sont donc empilées avant le comptage. `UNION ALL` est ici indispensable : `UNION` dédupliquerait les identifiants et ramènerait chaque joueur à une seule participation, ce qui viderait le classement de son sens. Le regroupement porte sur `p.player_id` et non sur le seul nom concaténé, pour que deux homonymes éventuels restent distingués.
+
+C'est ici que la moyenne de 2,2 calculée à la question 1 prend son utilité : elle donne l'échelle à laquelle lire ce classement. Les joueurs de tête qui s'en écartent nettement dessine ainsi les joueurs autour desquels se concentre l'attention.
 
 ## 7. Deux joueurs ont-ils des partenaires en commun ?
 
