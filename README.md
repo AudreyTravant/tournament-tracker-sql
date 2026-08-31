@@ -28,7 +28,7 @@ SELECT
 
 Résultat :
 
-<!-- ![Vue d'ensemble : 228 joueurs, 253 paires suivies, 2,2 paires par joueur en moyenne](images/q1-vue-ensemble.png) -->
+![Vue d'ensemble : 228 joueurs, 253 paires suivies, 2,2 paires par joueur en moyenne](images/q1-vue-ensemble.png)
 
 228 joueurs pour 253 paires suivies, soit 2,2 paires par joueur en moyenne. Le facteur 2 au numérateur tient au fait que chaque paire fait intervenir deux joueurs : sans lui, la moyenne serait divisée par deux. Ce rapport est révélateur du besoin — il ne s'agit pas d'un catalogue de joueurs, mais d'un réseau de confrontations repérées, où les mêmes noms reviennent associés à des partenaires différents.
 
@@ -44,7 +44,7 @@ WHERE player_a = LEAST(   'Orest Hura', 'Valerii Vlasenko')
 
 Résultat :
 
-<!-- ![Statut de la paire cherchée : Paire suivie](images/q2-recherche-paire.png) -->
+![Statut de la paire cherchée : Paire suivie](images/q2-recherche-paire.png)
 
 C'est la vérification unitaire. `LEAST` et `GREATEST` s'appliquent des deux côtés de la comparaison : la paire cherchée est normalisée exactement comme celles de la vue, et la recherche aboutit quel que soit l'ordre dans lequel l'utilisateur saisit les deux noms. Le `CASE` sur `COUNT(*)` garantit une ligne de réponse dans tous les cas — une absence de correspondance renverrait sinon un tableau vide, moins lisible qu'un « Non suivie » explicite.
 
@@ -73,7 +73,7 @@ ORDER BY (v.pair_id IS NULL), a.joueur_1;
 
 Résultat :
 
-<!-- ![Liste des matchs à venir annotée, les paires suivies apparaissant en tête](images/q3-filtrage-liste.png) -->
+![Liste des matchs à venir annotée, les paires suivies apparaissant en tête](images/q3-filtrage-liste.png)
 
 Le `LEFT JOIN` conserve toutes les lignes, y compris celles sans correspondance : l'utilisateur voit sa liste entière annotée plutôt qu'une liste filtrée dont il ne saurait pas ce qui a été écarté. Le `ORDER BY (v.pair_id IS NULL)` exploite le fait qu'en MySQL une expression booléenne vaut 0 ou 1 : les correspondances, pour lesquelles la condition est fausse, remontent en tête. Le travail de vérification manuelle disparaît — une seule exécution traite l'ensemble de la liste.
 
@@ -94,7 +94,7 @@ JOIN v_pairs v
 
 Résultat :
 
-<!-- ![Seules les paires suivies de la liste sont affichées](images/q4-correspondances-seules.png) -->
+![Seules les paires suivies de la liste sont affichées](images/q4-correspondances-seules.png)
 
 Variante de la précédente, à un mot près : le `JOIN` interne remplace le `LEFT JOIN` et élimine les lignes sans correspondance. Utile quand la liste du jour est longue et que seules quelques paires en ressortent. Les deux versions coexistent parce qu'elles répondent à deux usages réels — vérifier une liste entière, ou aller droit au résultat.
 
@@ -115,7 +115,7 @@ ORDER BY autre_joueur;
 
 Résultat :
 
-<!-- ![Liste des joueurs appariés avec Hura](images/q5-partenaires-joueur.png) -->
+![Liste des joueurs appariés avec Hura](images/q5-partenaires-joueur.png)
 
 Le joueur cherché peut être enregistré en `player1` comme en `player2` : la clause `WHERE` teste donc les deux colonnes, et le `CASE` renvoie l'autre membre de la paire quel que soit le sens de la saisie. Cette requête sert au repérage inverse — non plus « cette paire est-elle suivie ? », mais « qu'est-ce que je suis déjà autour de ce joueur ? ».
 
@@ -138,7 +138,7 @@ LIMIT 20;
 
 Résultat :
 
-<!-- ![Classement des vingt joueurs présents dans le plus de paires](images/q6-joueurs-frequents.png) -->
+![Classement des vingt joueurs présents dans le plus de paires](images/q6-joueurs-frequents.png)
 
 Un joueur compte une paire qu'il figure en `player1` ou en `player2` : les deux colonnes sont donc empilées avant le comptage. `UNION ALL` est ici indispensable — `UNION` dédupliquerait les identifiants et ramènerait chaque joueur à une seule participation, ce qui viderait le classement de son sens. Le regroupement porte sur `p.player_id` et non sur le seul nom concaténé, pour que deux homonymes éventuels restent distingués. Le classement obtenu dessine les joueurs autour desquels se concentre l'attention.
 
@@ -160,7 +160,7 @@ ORDER BY partenaire_commun;
 
 Résultat :
 
-<!-- ![Partenaires communs à Orest Hura et Valerii Vlasenko](images/q7-partenaires-communs.png) -->
+![Partenaires communs à Orest Hura et Valerii Vlasenko](images/q7-partenaires-communs.png)
 
 La CTE `partenaires` symétrise la vue : chaque paire y figure dans les deux sens, ce qui permet ensuite de chercher un joueur dans une seule colonne. L'auto-jointure rapproche alors les partenaires du premier joueur de ceux du second, et ne conserve que les noms présents des deux côtés. C'est la requête qui met en évidence les grappes de joueurs se croisant régulièrement.
 
@@ -191,7 +191,7 @@ SELECT 'Paires en double (y compris inversées)',
 
 Résultat :
 
-<!-- ![Les quatre contrôles qualité renvoient tous zéro](images/q8-controle-qualite.png) -->
+![Les quatre contrôles qualité renvoient tous zéro](images/q8-controle-qualite.png)
 
 Les quatre compteurs doivent valoir zéro — et par construction, ils le valent : chacun teste une situation que le schéma interdit déjà. Les doublons de joueurs sont bloqués par `uq_player_name`, les paires en double par `uq_pair`, la paire d'un joueur avec lui-même par `chk_no_self_pair`, et les références vers un joueur inexistant par les clés étrangères. C'est précisément l'intérêt de la requête : elle vérifie que les garde-fous font ce qu'on attend d'eux, et reste utile après un import ou une migration, puisqu'une contrainte protège les écritures futures sans rien dire de ce qui existait avant elle. Ce contrôle prolonge une leçon tirée de la reprise des données — cinq paires ont dû être écartées parce qu'elles référençaient des joueurs absents de la table (Danylo Us, Ivan Kryvyi, Mykola Treshchetka, Oleksandr Kolos, Vadym Komar). La contrainte `NOT NULL` a rejeté le résultat vide de la sous-requête et rendu l'erreur visible au lieu de la laisser passer silencieusement.
 
